@@ -29,7 +29,7 @@ var hbsTranspile = function hbsTranspile(config) {
     hbsTranspile.templatesDir = config.inputDir + config.templatesDir;
     hbsTranspile.JSONDir = config.inputDir + config.JSONDir;
     hbsTranspile.ext = config.ext; // DRA = ".hbs" || CrownPeak = ".html"
-    hbsTranspile.partialData = {};
+    hbsTranspile.partialData = { ENV: process.env };
     hbsTranspile.partials; // Array of Partials (files)
     hbsTranspile.jsonContent; // Array of JSON Files
     hbsTranspile.templates; // Array of Page Templates (Final Pages)
