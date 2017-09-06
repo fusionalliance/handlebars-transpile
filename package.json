@@ -1,7 +1,7 @@
 {
   "name": "handlebars-transpile",
   "description": "",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "dist/index.js",
   "author": "Dustin Rea<drea@fusionalliance.com>",
   "contributors": [
