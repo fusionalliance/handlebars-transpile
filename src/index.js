@@ -16,6 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const Handlebars = require('handlebars');
 const junk = require('junk');
+const requireUncached = require('require-uncached');
 
 let hbsTranspile = function (config) {
     console.log('=== Starting Handlebars Build ===');
@@ -114,10 +115,8 @@ const registerHelpers = function registerHelpers(err, results) {
 		helpers.forEach((helper) => {
 			let fileName = helper.split('.').shift();
 			let fullPath = path.resolve(`${hbsTranspile.helpersDir}${helper}`);
-			// let onlyPath = path.dirname(helper);
 
-			// let source = fs.readFileSync(`${hbsTranspile.helpersDir}${helper}`).toString('utf8');
-			const fn = require(fullPath);
+			const fn = requireUncached(fullPath);
 			Handlebars.registerHelper(fileName, fn);
 
 			console.log(`=== Registered Helper: ${fileName} ===`);

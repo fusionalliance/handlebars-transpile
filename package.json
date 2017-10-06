@@ -5,10 +5,10 @@
   "main": "dist/index.js",
   "author": "Dustin Rea<drea@fusionalliance.com>",
   "contributors": [
-      "Dustin Rea <drea@fusionalliance.com>",
-      "David Ragsdale <dragsdale@fusionalliance.com>",
-      "Andy McConnell <amcconell@fusionalliance.com>",
-      "Tim Gardner <tgardner@fusionalliance.com>"
+    "Dustin Rea <drea@fusionalliance.com>",
+    "David Ragsdale <dragsdale@fusionalliance.com>",
+    "Andy McConnell <amcconell@fusionalliance.com>",
+    "Tim Gardner <tgardner@fusionalliance.com>"
   ],
   "license": "MIT",
   "scripts": {
@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "handlebars": "^4.0.6",
-    "junk": "^2.1.0"
+    "junk": "^2.1.0",
+    "require-uncached": "^1.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
