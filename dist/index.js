@@ -17,6 +17,7 @@ var fs = require('fs');
 var path = require('path');
 var Handlebars = require('handlebars');
 var junk = require('junk');
+var requireUncached = require('require-uncached');
 
 var hbsTranspile = function hbsTranspile(config) {
     console.log('=== Starting Handlebars Build ===');
@@ -29,7 +30,7 @@ var hbsTranspile = function hbsTranspile(config) {
     hbsTranspile.templatesDir = config.inputDir + config.templatesDir;
     hbsTranspile.JSONDir = config.inputDir + config.JSONDir;
     hbsTranspile.ext = config.ext; // DRA = ".hbs" || CrownPeak = ".html"
-    hbsTranspile.partialData = {};
+    hbsTranspile.partialData = { ENV: process.env };
     hbsTranspile.partials; // Array of Partials (files)
     hbsTranspile.jsonContent; // Array of JSON Files
     hbsTranspile.templates; // Array of Page Templates (Final Pages)
@@ -120,10 +121,8 @@ var registerHelpers = function registerHelpers(err, results) {
         helpers.forEach(function (helper) {
             var fileName = helper.split('.').shift();
             var fullPath = path.resolve('' + hbsTranspile.helpersDir + helper);
-            // let onlyPath = path.dirname(helper);
 
-            // let source = fs.readFileSync(`${hbsTranspile.helpersDir}${helper}`).toString('utf8');
-            var fn = require(fullPath);
+            var fn = requireUncached(fullPath);
             Handlebars.registerHelper(fileName, fn);
 
             console.log('=== Registered Helper: ' + fileName + ' ===');
