@@ -27,13 +27,16 @@ describe('Handlebars Transpile', () => {
             
             hbsTranspile(config);
             const file = fs.readFileSync(`${config.outputDir}test-page.html`);
+            const fileTwo = fs.readFileSync(`${config.outputDir}test-page-two.html`)
             const $ = cheerio.load(file.toString('utf-8'));
+            const $Two = cheerio.load(file.toString('utf-8'));
             
             // expectations
             // Tests Partials are working
             expect($('title').text()).to.equal('Test Page');
             // Tests JSON Content is being injected
             expect($('#text1').text()).to.equal('Some Text');
+            expect($Two('#text1').text()).to.equal('Some Text');
         });
 
         it('should only compile files in the filter array when it is provided', () => {
