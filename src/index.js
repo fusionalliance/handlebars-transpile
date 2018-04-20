@@ -24,7 +24,7 @@ let hbsTranspile = function (config) {
     // Config
     hbsTranspile.inputDir = config.inputDir; // DRA = "./views" || CrownPeak = "./"
     hbsTranspile.outputDir = config.outputDir;
-		hbsTranspile.helpersDir = config.inputDir + config.helpersDir;
+    hbsTranspile.helpersDir = config.inputDir + config.helpersDir;
     hbsTranspile.partialsDir = config.inputDir + config.partialsDir;
     hbsTranspile.templatesDir = config.inputDir + config.templatesDir;
     hbsTranspile.JSONDir = config.inputDir + config.JSONDir;
@@ -34,19 +34,26 @@ let hbsTranspile = function (config) {
     hbsTranspile.jsonContent; // Array of JSON Files
     hbsTranspile.templates; // Array of Page Templates (Final Pages)
 
+    // Initially set the filter to an empty array
+    hbsTranspile.filter = [];
+    if(config.filter) {
+        hbsTranspile.filter = config.filter;
+    }
+
     // Functions
     hbsTranspile.walk = walk;
     hbsTranspile.setDirectory = setDirectory;
     hbsTranspile.walkCallback = walkCallback;
-		hbsTranspile.setHelpers = registerHelpers;
+    hbsTranspile.setHelpers = registerHelpers;
     hbsTranspile.setPartials = setPartials;
     hbsTranspile.setJSONContent = setJSONContent;
     hbsTranspile.setTemplates = setTemplates;
 
-    hbsTranspile.walkCallback(hbsTranspile.JSONDir, hbsTranspile.setJSONContent);
-		hbsTranspile.walkCallback(hbsTranspile.helpersDir, hbsTranspile.setHelpers);
-    hbsTranspile.walkCallback(hbsTranspile.partialsDir, hbsTranspile.setPartials);
-    hbsTranspile.walkCallback(hbsTranspile.templatesDir, hbsTranspile.setTemplates);
+    // Pass in empty arrays for filter option for everything except templates
+    hbsTranspile.walkCallback(hbsTranspile.JSONDir, [], hbsTranspile.setJSONContent);
+    hbsTranspile.walkCallback(hbsTranspile.helpersDir, [], hbsTranspile.setHelpers);
+    hbsTranspile.walkCallback(hbsTranspile.partialsDir, [], hbsTranspile.setPartials);
+    hbsTranspile.walkCallback(hbsTranspile.templatesDir, hbsTranspile.filter, hbsTranspile.setTemplates);
 }
 
 const walk = function walk(directory) {
@@ -66,8 +73,11 @@ const walk = function walk(directory) {
         });
 };
 
-const walkCallback = function walkCallback(dir, done) {
-    const contents = walk(dir);
+const walkCallback = function walkCallback(dir, filter, done) {
+    let contents = walk(dir);
+    if (filter.length > 0) {
+        contents = contents.filter(content => filter.indexOf(content) !== -1);
+    }
     done(null, contents)
 };
 
@@ -100,7 +110,6 @@ const setJSONContent = function setJSONContent(err, results) {
             var onlyPath = path.dirname(content);
             setDirectory(onlyPath);
             // Used Require to get a JSON Object
-            //hbsTranspile.partialData[contentName] = require(path.resolve(hbsTranspile.JSONDir + content));
             hbsTranspile.partialData[contentName] = JSON.parse(fs.readFileSync(hbsTranspile.JSONDir + content));
         });
     }
@@ -148,11 +157,7 @@ const setTemplates = function setTemplates(err, results) {
             setDirectory(onlyPath);
 
             // Write Compiled Templates to HTML Files.
-            fs.writeFile(output, result, function(err) {
-                if(err) {
-                    return console.log(err);
-                }
-            });
+            fs.writeFileSync(output, result);
             console.log('=== Compiled: ', fileName + hbsTranspile.ext, ' ===');
         });
         console.log('=== Finished Handlebars Build ===');
