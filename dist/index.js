@@ -147,7 +147,6 @@ var setTemplates = function setTemplates(err, results) {
         console.log('ERROR: ', err);
     } else {
         var templates = results;
-        console.log('templates: ', templates);
         // Load Template Files, Compile, Write
         templates.forEach(function (template) {
             // Capture the Filename to use as the HTML filename
