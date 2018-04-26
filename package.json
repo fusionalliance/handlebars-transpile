@@ -1,7 +1,7 @@
 {
   "name": "handlebars-transpile",
   "description": "Transpile Handlebars Templates and JSON Content to Static HTML Files",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "dist/index.js",
   "author": "Dustin Rea<drea@fusionalliance.com>",
   "contributors": [

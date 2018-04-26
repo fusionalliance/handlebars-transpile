@@ -7,7 +7,7 @@ const del = require('del');
 const hbsTranspile = require('../dist/index.js');
 
 describe('Handlebars Transpile', () => {
-    const config = {
+    let config = {
         inputDir: './test/views/',
         outputDir: './test/output/',
         partialsDir: 'partials/',
@@ -21,6 +21,16 @@ describe('Handlebars Transpile', () => {
         beforeEach(() => {
             del.sync([`${config.outputDir}*`],
                 { dot: true });
+
+            config = {
+                inputDir: './test/views/',
+                outputDir: './test/output/',
+                partialsDir: 'partials/',
+                templatesDir: 'templates/',
+                helpersDir: 'helpers/',
+                JSONDir: 'jsoncontent/',
+                ext: '.html',
+            };
         });
 
         it('should convert all handlebars templates, partials, and JSON to html', () => {
@@ -49,5 +59,20 @@ describe('Handlebars Transpile', () => {
             expect($('#text1').text()).to.equal('Some Text');
             expect(file).to.be.false;
         });
+
+        it('should not fail if the partials directory does not exist', () => {
+            config.partialsDir = 'nothing/';
+            config.filter = ['test-page-no-partials.hbs'];
+
+            hbsTranspile(config);
+            const $ = cheerio.load(fs.readFileSync(`${config.outputDir}test-page-no-partials.html`));
+
+            expect($('#text1').text()).to.equal('Some Text');
+        });
+    });
+
+    afterEach(() => {
+        del.sync([`${config.outputDir}**`],
+        { dot: true });
     });
 });
