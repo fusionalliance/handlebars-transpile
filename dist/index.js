@@ -66,6 +66,7 @@ var walk = function walk(directory) {
      *   That is a part of the Handlebars module itself. 
      */
     if (!fs.existsSync(directory)) {
+        console.log('=== Directory Does Not Exist: ' + directory + ' ===');
         return [];
     }
 
