@@ -57,6 +57,11 @@ let hbsTranspile = function (config) {
 }
 
 const walk = function walk(directory) {
+    // Sanity Check that the directory exists
+    if (!fs.existsSync(directory)) {
+        return [];
+    }
+
     function directoryWalker(dir) {
         const items = fs.readdirSync(dir).filter(junk.not).map(item => path.join(dir, item));
         const files = items.filter(item => fs.statSync(item).isFile());

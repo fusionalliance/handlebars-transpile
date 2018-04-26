@@ -58,6 +58,11 @@ var hbsTranspile = function hbsTranspile(config) {
 };
 
 var walk = function walk(directory) {
+    // Sanity Check that the directory exists
+    if (!fs.existsSync(directory)) {
+        return [];
+    }
+
     function directoryWalker(dir) {
         var items = fs.readdirSync(dir).filter(junk.not).map(function (item) {
             return path.join(dir, item);
