@@ -70,4 +70,9 @@ describe('Handlebars Transpile', () => {
             expect($('#text1').text()).to.equal('Some Text');
         });
     });
+
+    afterEach(() => {
+        del.sync([`${config.outputDir}**`],
+        { dot: true });
+    });
 });
