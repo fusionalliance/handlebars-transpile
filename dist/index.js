@@ -58,7 +58,13 @@ var hbsTranspile = function hbsTranspile(config) {
 };
 
 var walk = function walk(directory) {
-    // Sanity Check that the directory exists
+    /** 
+     * Sanity Check: Handle Non Existent Directories by returning an empty array.
+     * The Catch: module will not error out due to a non existent directory, however, if there are
+     *   partials / helpers included in the templates and this module doesn't find them due to 
+     *   the wrong directory passed into the config, handlebars will error out and the build will fail.
+     *   That is a part of the Handlebars module itself. 
+     */
     if (!fs.existsSync(directory)) {
         return [];
     }
